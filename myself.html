@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <style type="text/css">
+    	*{
+    		padding:0;
+    		margin:0;
+    	}
+    	.content{
+    		top:44px;
+    		margin-bottom:44px;
+    	}
+    	ul,li{
+    		list-style: none;
+    	}
+    	.my_p{
+    		font-size:6vw;
+    		line-height:13vw;
+    		height:13vw;
+    	}
+    	
+    </style>
+</head>
+<body style="background:#fff!important;height:100vh!important;">
+<header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">我的</h1>
+</header>	
+
+<div class="mui-scroll-wrapper content">
+    <div class="" style="height:40vw;padding:5vw 8vw;">
+	    <img src="images/myshow_user_img.jpg" style="width:30vw;float:left;margin-right:5vw;"/>
+	    <div class="dengluOrmes" style="float:left;position:relative;"></div>
+	</div>
+ 	
+	<ul class="mui-table-view" style="margin:3vh;border:2px solid #eee;border-radius:10px; ">
+	    <li class="mui-table-view-cell">
+	        <a class="mui-navigate-right" href="###"><span class="mui-icon mui-icon-location"></span>收货地址</a>
+	    </li>
+	    <li class="mui-table-view-cell">
+	        <a class="mui-navigate-right" href="###"><span class="mui-icon mui-icon-location"></span>我的订单</a>
+	    </li>
+	    <li class="mui-table-view-cell">
+	        <a class="mui-navigate-right" href="my_car.html"><span class="mui-icon mui-icon-location"></span>购物车</a>
+	    </li>
+	    <li class="mui-table-view-cell">
+	        <a class="mui-navigate-right" href="###"><span class="mui-icon mui-icon-location"></span>系统通知</a>
+	    </li>
+	</ul>
+</div>
+
+	
+<nav class="mui-bar mui-bar-tab">
+	<a class="mui-tab-item" href="home.html">
+	    <span class="mui-icon mui-icon-home"></span>
+	    <span class="mui-tab-label">首页</span>
+	</a>
+	<a class="mui-tab-item" href="med_list.html">
+	    <span class="mui-icon mui-icon-list"></span>
+	    <span class="mui-tab-label">分类</span>
+	</a>
+	<a class="mui-tab-item" href="search.html"> 
+	    <span class="mui-icon mui-icon-search"></span>
+	    <span class="mui-tab-label">搜索</span>
+	</a>
+	<a class="mui-tab-item mui-active">
+	    <span class="mui-icon mui-icon-person"></span>
+	    <span class="mui-tab-label">我的</span>
+	</a>
+</nav>
+</body>
+<script type="text/javascript" charset="utf-8">
+mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+});
+//判断本地是否有localStorage
+if(localStorage.getItem("medicine")!==null || sessionStorage.getItem("medicine")!==null){
+    var arr = JSON.parse(localStorage.getItem("medicine")||sessionStorage.getItem("medicine"));
+    var userID = arr["objectId"];
+    var userSession = arr["sessionToken"];
+    console.log(typeof userID)
+    console.log(userSession)
+    
+	//得到用户数据
+    $.ajax({
+    	type:"get",
+    	url:" https://api.leancloud.cn/1.1/users/"+userID,
+    	headers:{
+    		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+			"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+			"Content-Type": "application/json"
+    	},
+    	success:function(res){
+    		console.log(res)
+    		$(".dengluOrmes").html('<p class="my_p" style="padding-top:4vw;">昵称：'+res.username+'</p><p class="my_p">余额：0</p><a id="logOut" style="color:#ccc;position:absolute;right:0;bottom:3vw;">退出登录</a>')
+    	
+    	
+    		$("#logOut").on("tap",function(){
+    			confirm("确定退出登录")
+    			localStorage.removeItem("medicine")
+    		})
+    	},
+    	error:function(error){
+    		console.log(error)
+    	}
+    });
+    
+    //改用户数据
+//	$.ajax({
+//  	type:"put",
+//  	url:" https://api.leancloud.cn/1.1/users/"+userID,
+//  	headers:{
+//  		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+//			"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+//			"X-LC-Session":userSession,
+//			"Content-Type": "application/json"
+//  	},
+//  	data:'{"my_car":"55555"}',
+//  	success:function(res){
+//  		console.log(res)
+//  	},
+//  	error:function(error){
+//  		console.log(error)
+//  	}
+//  });
+}else{
+	$(".dengluOrmes").html("<a href='login.html' style='line-height:30vw;height:30vw;font-size:6vw;'>请先登录</a>")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//此方法解决 mui里a链接herf不能跳转
+mui('body').on('tap','a',function(){document.location.href=this.href;});
+</script>
+</html>

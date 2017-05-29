@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title></title>
+	<script src="js/mui.min.js"></script>
+    <script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+   
+</head>
+<style type="text/css">
+	.content_in{
+		margin-bottom:8vh;
+	}
+	.footer{
+		position:fixed;
+		bottom:0;
+		width:100vw;
+		height:9vh;
+		z-index:99;
+		background:#fdfdfd;
+		border-top:1px solid #eee;
+	}
+	.btn1,.btn2{
+		float:left;
+		width:40vw;
+		height:6vh;
+		outline:0;
+		border-radius:4px;
+		margin-top:1.5vh;
+		margin-left:8vw;
+		background:#f15a0c;
+		color:#fff;
+		border:1px solid #eee;
+	}
+	.btn2{
+		background:#fff;
+		color:#666;
+		float:right;
+		margin:1.5vh 8vw 0 0 ;
+	}
+</style>
+<body> 
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><span style="font-size:20px;">返回</span></a>
+    <a href="my_car.html" class="mui-pull-right" style="line-height:44px;height:44px;font-size:20px;">购物车</a>
+</header>
+
+<div class="mui-scroll-wrapper">
+    <div class="mui-scroll content">
+        <!--这里放置真实显示的DOM内容-->
+    </div>
+</div>
+
+<div class="footer">
+    <button type="button" class="btn1" >立即购买</button>
+    <button type="button" class="btn2" id="btn2">加入购物车</button>
+</div>
+	
+	
+	
+</body>
+<script type="text/javascript">
+mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+})	
+var objectId = window.location.search.split("=")[1];
+console.log("https://api.leancloud.cn/1.1/classes/medicine/"+objectId)
+$.ajax({
+	type: "GET",
+	url: "https://api.leancloud.cn/1.1/classes/medicine/"+objectId,
+	dataType:"JSON",
+	headers: {
+		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+		"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+		"Content-Type": "application/json"
+	},
+	success: function(res) {
+//			请求的是字符串,转为对象
+		var data = JSON.parse(res);
+//			console.log(data)
+		var str = "";
+		console.log(data)
+		str =
+			'<div class="content_in">'+
+				'<img style="width:100vw;margin-top:44px" src="'+data.M_zhutu.url+'"/>'+
+					'<ul class="mui-table-view">'+
+				    '<li class="mui-table-view-cell">名称：'+data.M_name+'</li>'+
+				    '<li class="mui-table-view-cell">价格：'+data.M_price+'</li>'+
+				    '<li class="mui-table-view-cell">性状：'+data.M_character+'</li>'+
+				    '<li class="mui-table-view-cell">类型：'+data.M_adapt+'，'+data.M_type+'</li>'+
+				    '<li class="mui-table-view-cell">储藏：'+data.M_store+'</li>'+
+				    '<li class="mui-table-view-cell">规格：'+data.M_standard+'</li>'+
+				    '<li class="mui-table-view-cell">功能：'+data.M_function+'</li>'+
+				    '<li class="mui-table-view-cell">批准文号：'+data.M_wh+'</li>'+
+				    '<li class="mui-table-view-cell">生产企业：'+data.M_factory+'</li>'+
+				    '<li class="mui-table-view-cell">有效期：'+data.M_duration+'</li>'+
+				'</ul>'+
+				'<img style="width:100vw;" src="'+data.M_futu.url+'"/>'+
+			'</div>';
+		$(".content").html(str)
+	}
+})
+
+//mui(".btn2").on("tap",function(){
+//	console.log(1)
+//})
+
+document.getElementById("btn2").onclick = function(){
+	if(localStorage.getItem("medicine")!==null || sessionStorage.getItem("medicine")!==null){
+	    var arr = JSON.parse(localStorage.getItem("medicine")||sessionStorage.getItem("medicine"));
+	    var userID = arr["objectId"];
+	    var userSession = arr["sessionToken"];
+	    
+		
+		//得到用户数据
+	    $.ajax({
+	    	type:"get",
+	    	url:" https://api.leancloud.cn/1.1/users/"+userID,
+	    	headers:{
+	    		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+				"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+				"Content-Type": "application/json"
+	    	},
+	    	success:function(res){
+//	    		console.log(res.my_car)
+	    		var str = "";
+	    		var newstr = "";
+	    		str = res.my_car
+	    		str.push({"objectId":objectId,"number":1})
+	    		newstr = JSON.stringify(str)
+	    		change_pro(newstr,str);
+	    	},
+	    	error:function(error){
+	    		console.log(error)
+	    	}
+	    });
+		
+		    //改用户数据
+	    function change_pro(newstr,old){
+//	    	console.log(typeof newstr)
+	    	$.ajax({
+		    	type:"put",
+		    	url:" https://api.leancloud.cn/1.1/users/"+userID,
+		    	headers:{
+		    		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+					"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+					"X-LC-Session":userSession,
+					"Content-Type": "application/json"
+		    	},
+		    	data:'{"my_car":{"__op":"AddUnique","objects":'+newstr+'}}',
+		    	success:function(res){
+		    		alert("添加成功")
+		    	},
+		    	error:function(error){
+		    		console.log(error)
+		    	}
+		    });
+	    }
+		
+	    
+	    
+   }else{
+   		alert("请登录");
+   		window.location.href = "login.html";
+   		
+   }
+}
+
+
+</script>
+</html>

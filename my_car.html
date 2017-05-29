@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+   	<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+*{
+	padding:0;
+	margin:0;
+}    	
+.fl{
+	float:left;
+}
+.fr{
+	float:right;
+}
+.pa{
+	position: absolute;
+}
+.pr{
+	position:relative;
+}
+
+p{
+	margin-bottom:0;
+}
+
+.shopping_car_content .car_all{
+    height:0.88rem;
+    line-height:0.88rem;
+    font-size:0.3rem;
+    border-top:1px solid #9a9fa5;
+    background: #747474;
+}
+.shopping_car_content .car_all .car_all_price{
+    color:#ab1a1d;
+}
+
+.shopping_car_list div{
+    height:1.74rem;
+    margin:0.27rem 0;
+    margin-left:0.33rem;
+}
+.shopping_car_list div img{
+    height:1.72rem;
+    width:1.72rem;
+    border:1px solid #bababa;
+    float:left;
+    margin-right:0.25rem;
+}
+.shopping_car_list div .p1{
+    float:left;
+    height:0.40rem;
+    width:3.2rem;
+    font-size:0.28rem;
+    line-height:0.4rem;
+    color:#333;
+    overflow: hidden;
+}
+.shopping_car_list span{
+    float:left;
+    width:0.57rem;
+    height:0.42rem;
+    background: #5d5d5d;
+    color:#fff;
+    font-size:0.18rem;
+    border-radius:0.09rem;
+    line-height:0.42rem;
+    text-align:center;
+}
+.shopping_car_list input{
+    float:left;
+    border:0;
+    box-shadow:-1px -1px 2px #eee;
+    width:0.76rem;
+    height:0.44rem;
+    margin:0 0.32rem;
+    text-align:center;
+}
+.shopping_car_list .car_price{
+    color:#ab1b1b;
+}
+.shopping_car_list .car_del{
+    width:0.26rem;
+    height:0.32rem;
+    right:0.35rem;
+    top:0.09rem;
+    border:0;
+}
+.shopping_add{
+    height:0.42rem;
+    width:3.2rem;
+    margin-top:0.1rem;
+}
+    </style>
+</head>
+<body style="background: #fff;">
+	
+	<header class="mui-bar mui-bar-nav">
+	    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	    <h1 class="mui-title">购物车</h1>
+	    <a class="mui-pull-right" style="height:44px;line-height:44px;font-size:20px;">结算</a>
+	</header>
+	<div class="mui-scroll-wrapper" style="margin-top:44px;">
+	    <div class="mui-scroll" id="box">
+	    	<div class="shopping_car_content">
+			    <div class="car_all" style="padding-left:10px;">商品数量：<span class="car_num"></span> 应付金额(不含运费)：￥<span class="car_all_price"></span></div>
+			    <div class="shopping_car_list"></div>
+			</div>
+	    </div>
+	</div>
+
+	
+</body>
+<script type="text/javascript">
+	//mui组件  上下弹性
+	mui('.mui-scroll-wrapper').scroll({
+		deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+	});
+	
+	if(localStorage.getItem("medicine")!==null || sessionStorage.getItem("medicine")!==null){
+	    var arr = JSON.parse(localStorage.getItem("medicine")||sessionStorage.getItem("medicine"));
+	    var userID = arr["objectId"];
+	    var userSession = arr["sessionToken"];
+	    
+		var createstr = "";
+		//得到用户数据
+	    $.ajax({
+	    	type:"get",
+	    	url:" https://api.leancloud.cn/1.1/users/"+userID,
+	    	headers:{
+	    		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+				"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+				"Content-Type": "application/json"
+	    	},
+	    	success:function(res){
+	    		var data = res.my_car;
+	    		var allNum = 0;
+	    		data.forEach((item,i,data)=>{
+//					console.log(item.number)
+//					console.log(item.pr)
+	    			console.log(create(item.objectId,item.number))
+	    			
+	    			
+	    			
+	    		})
+	 
+	    	},
+	    	error:function(error){
+	    		console.log(error)
+	    	}
+	    });
+	    
+	    //根据获取到的产品id和产品数量 创建页面
+	    function create(objectID,num){
+	    	$.ajax({
+	    		type:'get',
+	    		url:'https://api.leancloud.cn/1.1/classes/medicine/'+objectID,
+	    		headers:{
+		    		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+					"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+					"Content-Type": "application/json"
+	    		},
+	    		success:(res)=>{
+	    			console.log(res)
+    				createstr ="<div id='"+objectID+"' class='car_group pr'><img src='"+res.M_zhutu.url+"'/>" +
+                        "<p class='p1'>"+res.M_name+"</p>" +
+                        "<p class='p1'>"+res.M_type+"</p>" +
+                        "<p class='p1'>单价：<em class='car_price'>￥"+res.M_price+"</em></p>" +
+                        "<p class='fl shopping_add'>" +
+                        "<span class='car_min'>-</span>" +
+                        "<input type='text' value='"+num+"'>" +
+                        "<span class='car_add'>+</span>" +
+                        "</p>" +
+                        "<img class='car_del pa' src='images/del.jpg'>" +
+                        "</div>"
+    				$(".shopping_car_list").append(createstr)
+    				$(".car_num")[0].innerHTML = Number($(".car_num")[0].innerHTML)+num;
+	    			$(".car_all_price")[0].innerHTML =Number($(".car_all_price")[0].innerHTML)+ parseFloat(res.M_price)*num
+	    		}
+	    	})
+	    }
+ 
+//      // 减
+//      $(".car_min").on("click",function(){
+//          $(this).next()[0].value <= 1 || $(this).next()[0].value--;
+//          shuaxin();
+//          update($(this).parents(".car_group").attr("id"),$(this).next()[0].value)
+//      })
+//      //加
+//      $(".car_add").on("click",function(){
+//          $(this).prev()[0].value >= 20 || $(this).prev()[0].value++;
+//          shuaxin();
+//          update($(this).parents(".car_group").attr("id"),$(this).prev()[0].value)
+//
+//      })
+//      //删除
+//      $(".car_del").on("click",function(){
+//          update($(this).parents(".car_group").attr("id"),0);
+//          $(this).parents(".car_group").remove();
+//      })
+//	    
+		
+//		    //改用户数据
+//	    function change_pro(newstr,old){
+////	    	console.log(typeof newstr)
+//	    	$.ajax({
+//		    	type:"put",
+//		    	url:" https://api.leancloud.cn/1.1/users/"+userID,
+//		    	headers:{
+//		    		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+//					"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+//					"X-LC-Session":userSession,
+//					"Content-Type": "application/json"
+//		    	},
+//		    	data:'{"my_car":{"__op":"AddUnique","objects":'+newstr+'}}',
+//		    	success:function(res){
+//		    		alert("添加成功")
+//		    	},
+//		    	error:function(error){
+//		    		console.log(error)
+//		    	}
+//		    });
+//	    }
+		
+//	    document.getElementsByTagName("body")[0].onclick = function(){
+//	    	alert(1)
+//	    }
+	    
+   }else{
+   		alert("请登录");
+   		window.location.href = "login.html";
+   		
+   }
+</script>
+</html>

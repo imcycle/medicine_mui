@@ -1,0 +1,182 @@
+{
+  "index.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "home.html"
+    ],
+    "refer": [
+      "home.html"
+    ]
+  },
+  "home.html": {
+    "resources": [
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "images/27.jpg",
+      "images/26.jpg",
+      "product.json",
+      "js/zepto.js",
+      "js/touch.min.js",
+      "js/mui.min.js",
+      "med_list.html",
+      "myself.html",
+      "search.html"
+    ],
+    "refer": [
+      "med_list.html",
+      "myself.html",
+      "search.html"
+    ]
+  },
+  "med_list.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/zepto.js",
+      "home.html",
+      "search.html",
+      "product.html"
+    ],
+    "refer": [
+      "home.html",
+      "search.html",
+      "product.html"
+    ]
+  },
+  "look1.html": {
+    "resources": [
+      "images/look1_2.jpg",
+      "images/look1_1.jpg",
+      "search.html",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "search.html"
+    ]
+  },
+  "search.html": {
+    "resources": [
+      "med_list.html",
+      "images/look1.jpg",
+      "js/mui.min.js",
+      "look1.html",
+      "css/mui.min.css",
+      "images/look2.jpg",
+      "js/zepto.js",
+      "images/med_ser.png",
+      "myself.html",
+      "look2.html",
+      "home.html",
+      "search_med.html"
+    ],
+    "refer": [
+      "med_list.html",
+      "look1.html",
+      "myself.html",
+      "look2.html",
+      "home.html",
+      "search_med.html"
+    ]
+  },
+  "myself.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "search.html",
+      "js/zepto.js",
+      "login.html",
+      "med_list.html",
+      "images/myshow_user_img.jpg",
+      "my_car.html",
+      "home.html"
+    ],
+    "refer": [
+      "search.html",
+      "login.html",
+      "med_list.html",
+      "my_car.html",
+      "home.html"
+    ]
+  },
+  "look2.html": {
+    "resources": [
+      "images/look2_1.jpg",
+      "search.html",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "search.html"
+    ]
+  },
+  "login.html": {
+    "resources": [
+      "myself.html",
+      "register.html",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/zepto.js"
+    ],
+    "refer": [
+      "myself.html",
+      "register.html"
+    ]
+  },
+  "register.html": {
+    "resources": [
+      "login.html",
+      "css/mui.min.css",
+      "js/touch.min.js"
+    ],
+    "refer": [
+      "login.html"
+    ]
+  },
+  "search_med.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "search_med_in.html",
+      "js/zepto.js",
+      "product.html",
+      "search.html"
+    ],
+    "refer": [
+      "search_med_in.html",
+      "product.html",
+      "search.html"
+    ]
+  },
+  "product.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/zepto.js",
+      "search_med.html",
+      "med_list.html",
+      "my_car.html"
+    ],
+    "refer": [
+      "search_med.html",
+      "med_list.html",
+      "my_car.html"
+    ]
+  },
+  "my_car.html": {
+    "resources": [
+      "js/rem.js",
+      "myself.html",
+      "images/del.jpg",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/zepto.js",
+      "product.html"
+    ],
+    "refer": [
+      "myself.html",
+      "product.html"
+    ]
+  }
+}

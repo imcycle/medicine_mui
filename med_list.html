@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    
+    <style type="text/css">
+    	.content{
+    		top:83px;
+    		margin-bottom:44px;
+    	}
+    	.aaa{
+    		display: none; 
+    	}
+    	.list img{
+    		width:46vw!important;
+    		line-height:46vw;
+    	}
+    	.med_list_nav{
+    		margin-top:44px;
+    	}
+    	
+    	/*让图片垂直居中*/
+    	.zhong_img{
+    		vertical-align: middle;
+    	}
+    	.zhong_span{
+    		vertical-align: middle;
+    		display: inline-block;
+    		width:0;
+    		height:100%;
+    	}
+    </style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">列表</h1>
+</header>
+<div class="mui-segmented-control med_list_nav">
+            <a class="mui-control-item bbb mui-active" href="#item1">全部</a>
+            <a class="mui-control-item bbb" href="#item2">中药</a>
+            <a class="mui-control-item bbb" href="#item3">西药</a>
+</div>
+<div class="mui-scroll-wrapper content">
+	
+    <div class="mui-scroll">
+        
+        <div class="#item1 aaa" style="display: block;">
+        	<ul class="mui-table-view mui-grid-view list"></ul>
+        </div>
+        <div class="#item2 aaa">
+        	<ul class="mui-table-view mui-grid-view list"></ul>
+        </div>
+        <div class="#item3 aaa">
+        	<ul class="mui-table-view mui-grid-view list"></ul>
+        </div>
+        <div class="#item4 aaa">
+        	<ul class="mui-table-view mui-grid-view list"></ul>
+        </div>
+    </div>
+</div>
+	
+<nav class="mui-bar mui-bar-tab">
+    <a class="mui-tab-item" href="home.html">
+        <span class="mui-icon mui-icon-home"></span>
+        <span class="mui-tab-label">首页</span>  
+    </a>
+    <a class="mui-tab-item mui-active">
+        <span class="mui-icon mui-icon-list"></span>
+        <span class="mui-tab-label">分类</span>
+    </a>
+    <a class="mui-tab-item" href="search.html"> 
+        <span class="mui-icon mui-icon-search"></span>
+        <span class="mui-tab-label">搜索</span>
+    </a>
+    <a class="mui-tab-item" href="myself.html">
+        <span class="mui-icon mui-icon-person"></span>
+        <span class="mui-tab-label">我的</span>
+    </a>
+</nav>
+</body>
+<script type="text/javascript" charset="utf-8">
+function tab(){
+	$(".bbb").on("tap",function(){
+		$(".aaa").hide();
+		$(".aaa").eq($(this).index()).show()
+	})
+}
+tab();
+
+mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+});
+
+//创建产品
+function create_product(){
+	$.ajax({
+		type: "GET",
+		url: "https://api.leancloud.cn/1.1/classes/medicine",
+		dataType:"JSON",
+		headers: {
+			"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+			"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+			"Content-Type": "application/json"
+		},
+		success: function(res) {
+//			请求的是字符串,转为对象
+			var data = JSON.parse(res)["results"]	
+//			console.log(data)
+			var str_xiyao = "";
+			var str_zhongyao = "";
+			$.each(data, function(i) {
+//				通过M_type筛选中药西药
+				if(data[i]["M_type"] == "中药"){
+//					console.log(i)
+//					创建每一个中药
+					str_zhongyao +='<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
+				        '<a href="product.html?='+data[i].objectId+'">'+
+				           '<div class="mui-media-object" style="width:46vw!important;height:46vw!important;"><img class="zhong_img" src="'+data[i]["M_zhutu"]["url"]+'"><span class="zhong_span"></span></div>'+ 
+				            '<div class="mui-media-body">'+data[i]["M_name"]+'</div>'+
+				            '<div class="mui-media-body"><span style="color:red">'+data[i]["M_price"]+'</span>&nbsp;&nbsp;&nbsp;销量：0</div>'+
+				        '</a>'+
+				    '</li>' 	
+				}else{
+//					创建每一个西药
+					str_xiyao +='<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
+				        '<a href="product.html?='+data[i].objectId+'">'+
+				           '<div class="mui-media-object" style="width:46vw!important;height:46vw!important;"><img class="zhong_img" src="'+data[i]["M_zhutu"]["url"]+'"><span class="zhong_span"></span></div>'+ 
+				            '<div class="mui-media-body">'+data[i]["M_name"]+'</div>'+
+				            '<div class="mui-media-body"><span style="color:red">'+data[i]["M_price"]+'</span>&nbsp;&nbsp;&nbsp;销量：0</div>'+
+				        '</a>'+
+				    '</li>' 					
+				}	
+			});
+//			把拼接好的中药字符串塞入全部区
+			$(".list")[0].innerHTML = str_zhongyao+str_xiyao;
+//			把拼接好的中药字符串塞入中药区
+			$(".list")[1].innerHTML = str_zhongyao;
+//			把拼接好的中药字符串塞入西药区
+			$(".list")[2].innerHTML = str_xiyao;	
+		},
+		error: function(error) {
+			console.log("发送error")
+			// console.log(JSON.parse(error.responseText));
+		}
+	});	
+}
+create_product();
+  	
+  	
+ mui('body').on('tap','a',function(){document.location.href=this.href;});     	
+      	
+      	
+</script>
+</html>

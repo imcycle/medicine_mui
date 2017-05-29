@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<style type="text/css">
+	.search_top{
+		margin-top:44px;
+	}
+	.content{
+		top:78px;
+	}
+	.aaa{
+		display: none; 
+	}
+	.content_in img{
+		width:46vw!important;
+		line-height:46vw;
+	}
+	.med_list_nav{
+		margin-top:44px;
+	}
+	
+	/*让图片垂直居中*/
+	.zhong_img{
+		vertical-align: middle;
+	}
+	.zhong_span{
+		vertical-align: middle;
+		display: inline-block;
+		width:0;
+		height:100%;
+	}
+</style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav"> 
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><span style="font-size:20px;">返回</span></a>
+</header>
+<!--<a href="search_med_in.html">-->
+	<div class="mui-input-row mui-search search_top" id="to-search_med_in">
+	    <input id="ser" type="search" class="mui-input-clear" placeholder=""/>
+	</div>
+<!--</a>-->
+
+<div class="mui-scroll-wrapper content">
+    <div class="mui-scroll">
+        <div>
+        	<ul class="mui-table-view mui-grid-view content_in"></ul>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script type="text/javascript">
+mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+})	
+
+
+//监听搜索框内容改变
+document.getElementById("ser").addEventListener('input',function(){
+//	console.log($(this).val());
+	var _val = $(this).val();
+	$.ajax({
+		type:"get",
+		url:"https://api.leancloud.cn/1.1/classes/medicine",
+		dataType:"JSON",
+		headers:{
+			"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+			"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+			"Content-Type": "application/json"
+		},
+		success:function(res){
+//			console.log(JSON.parse(res).results)
+			var s_str = "";
+			JSON.parse(res).results.forEach(function(currentValue){
+//				console.log(item.M_name)
+				if(JSON.stringify(currentValue.M_name).indexOf(_val)!=-1||JSON.stringify(currentValue.M_adapt).indexOf(_val)!=-1||JSON.stringify(currentValue.M_type).indexOf(_val)!=-1){
+//					console.log(currentValue.M_name)
+				    s_str +='<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
+						        '<a href="product.html?='+currentValue.objectId+'">'+
+						           '<div class="mui-media-object" style="width:46vw!important;height:46vw!important;"><img class="zhong_img" src="'+currentValue["M_zhutu"]["url"]+'"><span class="zhong_span"></span></div>'+ 
+						            '<div class="mui-media-body">'+currentValue["M_name"]+'</div>'+
+						            '<div class="mui-media-body"><span style="color:red">'+currentValue["M_price"]+'</span>&nbsp;&nbsp;&nbsp;销量：0</div>'+
+						        '</a>'+
+						    '</li>'
+				}
+			})
+			$(".content_in").html(s_str);
+			
+		}
+	})
+	
+});
+//$("#ser").bind("input  propertychange",function(){
+//	console.log($(this).val());
+//})；
+
+//创建产品
+$.ajax({
+	type: "GET",
+	url: "https://api.leancloud.cn/1.1/classes/medicine",
+	dataType:"JSON",
+	headers: {
+		"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+		"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+		"Content-Type": "application/json"
+	},
+	success: function(res) {
+//			请求的是字符串,转为对象
+		var data = JSON.parse(res)["results"]	
+//			console.log(data)
+		var a_str = "";
+		$.each(data, function(i) {
+//			
+			a_str +='<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
+		        '<a href="product.html?='+data[i].objectId+'">'+
+		           '<div class="mui-media-object" style="width:46vw!important;height:46vw!important;"><img class="zhong_img" src="'+data[i]["M_zhutu"]["url"]+'"><span class="zhong_span"></span></div>'+ 
+		            '<div class="mui-media-body">'+data[i]["M_name"]+'</div>'+
+		            '<div class="mui-media-body"><span style="color:red">'+data[i]["M_price"]+'</span>&nbsp;&nbsp;&nbsp;销量：0</div>'+
+		        '</a>'+
+		    '</li>' 	
+				
+		});
+//			把拼接好的中药字符串塞入全部区
+		$(".content_in").html(a_str);
+	},
+	error: function(error) {
+		console.log("发送error")
+		// console.log(JSON.parse(error.responseText));
+	}
+});	
+ mui('body').on('tap','a',function(){document.location.href=this.href;});     	
+</script>
+</html>

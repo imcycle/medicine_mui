@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/touch.min.js" type="text/javascript" charset="utf-8"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <style type="text/css">
+    	.content{
+    		top:48px;
+    		margin-bottom:44px;
+    	}
+    	.zhuce{
+    		width:94vw;
+    	}
+    </style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">注册</h1>
+</header>	
+
+<form class="mui-input-group content">
+    <div class="mui-input-row">
+        <label>用户名</label>
+    <input id="user" type="text" class="mui-input-clear" placeholder="请输入用户名">
+    </div>
+    <div class="mui-input-row">
+        <label>手机号</label>
+        <input id="phone" type="text" class="mui-input-number" placeholder="请输入手机号">
+    </div>
+    <!--<div class="mui-input-row">
+        <label>邮箱</label>
+        <input id="email" type="email" class="mui-input-number" placeholder="请输入邮箱">
+    </div>-->
+    <div class="mui-input-row">
+        <label>密码</label>
+        <input id="pwd" type="password" class="mui-input-password" placeholder="请输入密码">
+    </div>
+    <div class="mui-input-row">
+        <label>重复密码</label>
+        <input id="sure" type="password" class="mui-input-password" placeholder="请重复输入密码">
+    </div>
+    <div class="mui-button-row">
+        <button id="btn" type="button" class="mui-btn mui-btn-primary zhuce" >注册</button>
+    </div>
+	<div id="err" style="color:#f00;font-size:4vw;margin:0 3vw"></div>
+</form>
+</body>
+<script type="text/javascript" charset="utf-8">
+document.getElementById("btn").onclick = function(){
+	$("#err").html("");
+	var user = $("#user").val();
+	var phone = $("#phone").val();
+//	var email = $("#email").val();
+	var pwd = $("#pwd").val();
+	var sure = $("#sure").val();
+	console.log(user);
+	console.log(phone);
+	console.log(pwd);
+//	console.log(typeof user);
+	if(/\w{6,20}/g.test(pwd)&&/^1[3 4 5 7 8]\d{9}$/g.test(phone)){
+		if(pwd==sure){
+			$.ajax({
+				type:"POST",
+				url:"https://api.leancloud.cn/1.1/users",
+				dataType:"JSON",
+				async:true,
+				headers:{
+					"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+					"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+					"Content-Type": "application/json"
+				},
+				data:'{"username":"'+user+'","mobilePhoneNumber":"'+phone+'","password":"'+pwd+'"}',
+				success:function(res){
+					var me = JSON.parse(res)
+					var str = JSON.stringify({"objectId":me.objectId,"sessionToken":me.sessionToken})
+					localStorage.setItem("medicine",str)
+					alert("注册成功");
+					window.location.href = "myself.html";
+				},
+				error: function(error) {
+//					console.log(JSON.parse(error.responseText))
+					 $("#err").html(JSON.parse(error.responseText).error);
+				}
+			});
+		}else{
+			$("#err").html("两次输入密码不一样");
+		}
+	}else{
+		$("#err").html("请输入正确格式");
+	}
+//	return false;
+}
+</script>
+</html>

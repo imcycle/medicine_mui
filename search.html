@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <style type="text/css">
+    	.content{
+    		top:44px;
+    		margin-bottom:44px;
+    	}
+    	.con_img{
+    		width:100vw;
+    	}
+    	.list_title{
+    		height:7vh;
+    		text-align:center;
+    		line-height:7vh;
+    		background: #fff;
+    		border-bottom:1px solid #eee;
+    		margin-bottom:2px;
+    		margin-top:2px;
+    		font-size:4vh;
+    	}
+    	.list_img{
+    		margin-top:3vw;
+    		width:30vw;min-width:30vw;
+    		height:25vw!important;
+    	}
+    	.list_div{
+    		line-height:12vw!important;  
+    		margin-top:4vw;
+    		font-size:5vw;
+    		text-indent:2vw;
+    	}
+    	
+    </style>
+</head style="background:#fff!important;height:100vh!important;">
+<body style="height:100%!important">
+<header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">搜索</h1>
+</header>	
+
+<div class="mui-scroll-wrapper content">
+    <div class="mui-scroll">
+        <a href="search_med.html"><img class="con_img" src="images/med_ser.png"/></a>
+        <div class="list_title">值得一看</div>
+		<ul class="mui-table-view">
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="look1.html" style="height:150px;">
+		            <img class="mui-media-object mui-pull-left list_img" src="images/look1.jpg">
+		            <div class="mui-media-body list_div">
+		                20个必读的日常健康生活小常识
+		                <p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+		            </div>
+		        </a>
+		    </li>
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="look2.html" style="height:150px;">
+		            <img class="mui-media-object mui-pull-left list_img" src="images/look2.jpg">
+		            <div class="mui-media-body list_div">
+		                                                健康养生的小常识
+		                <p class='mui-ellipsis'>想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+		            </div>
+		        </a>
+		    </li>
+		</ul>
+				
+		        
+		    </div>
+		</div>
+		
+			
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="home.html">
+			    <span class="mui-icon mui-icon-home"></span>
+			    <span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="med_list.html">
+			    <span class="mui-icon mui-icon-list"></span>
+			    <span class="mui-tab-label">分类</span>
+			</a>
+			<a class="mui-tab-item mui-active"> 
+			    <span class="mui-icon mui-icon-search"></span>
+			    <span class="mui-tab-label">搜索</span>
+			</a>
+			<a class="mui-tab-item" href="myself.html">
+			    <span class="mui-icon mui-icon-person"></span>
+			    <span class="mui-tab-label">我的</span>
+			</a>
+		</nav>
+		</body>
+<script type="text/javascript" charset="utf-8">
+mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+});
+
+mui('body').on('tap','a',function(){document.location.href=this.href;});
+</script>
+</html>

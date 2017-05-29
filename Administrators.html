@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+<script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+<body>
+	<div id="form" class="form-inline">
+	  <button type="submit" class="btn btn-danger">Send invitation</button><br />
+		
+	  <div class="form-group">
+	    <label for="exampleInputName2">Name</label>
+	    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleInputEmail2">Email</label>
+	    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+	  </div>
+
+	</div>
+</body>
+<script type="text/javascript">
+	$.ajax({
+		type:"get",
+		url:"https://api.leancloud.cn/1.1/classes/medicine",
+		headers:{
+			"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+  			"X-LC-Key": "mS8hGX41T1izINsur65qlFe5"
+		},
+		success:function(res){
+			var str = "";
+			var num = 0;
+			var data = res.results;
+//			console.log(data);
+			data.forEach(function(item,index){
+				var aa = "";
+				
+//				console.log(item);
+				for(var k in item){
+					if(k!="objectId"){
+						num++
+//						console.log(k)
+						aa += '<div class="form-group">'+
+							    '<label for="exampleInputName'+num+'">'+k+'</label>'+
+							    '<input  type="text" class="form-control '+item.objectId+' " id="exampleInputName'+num+'" value="'+item[k]+'">'+
+							  '</div>&nbsp;&nbsp;&nbsp;'
+							  
+											
+					}
+
+				}
+				
+				str +='<div style="white-space:nowrap"><button class="btn btn-danger">删除</button><div style="display:inline-block;width:70px;text-indent:10px;">商品'+Number(index+1)+'</div>'+aa+'</div>'
+				
+				
+			})
+			
+			$("#form").html('<button style="width:90px;" type="submit" class="btn btn-danger">添加</button><br />'+str)
+
+
+			$("#form input").on("blur",function(){
+//				console.log(1)
+//				console.log(this.className)
+				var proName = $(this).prev().html();
+				var proVal = $(this).val();
+				console.log(proName)
+				console.log(proVal)
+				var proId = this.className.split(" ")[1];
+				console.log(typeof proId)
+				$.ajax({
+					type:"PUT",
+					url:"https://api.leancloud.cn/1.1/classes/medicine/590486f21b69e60058d260ee",
+//					dataType:"JSON",
+					headers:{
+						"X-LC-Id": "4emQeiYwtCcT2Hz6MuWxbGat-gzGzoHsz",
+  						"X-LC-Key": "mS8hGX41T1izINsur65qlFe5",
+						"Content-Type":"application/json"
+					},
+//					data:'{"'+proName+'":"'+proVal+'"}',
+					data:'{"M_adapt":"保健了"}',
+					success:function(res){
+						console.log(JSON.stringify(res))
+					}
+				})
+			})
+			
+
+
+
+		}
+		
+	})
+</script>
+</html>
